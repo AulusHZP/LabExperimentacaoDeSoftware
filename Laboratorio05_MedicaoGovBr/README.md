@@ -283,6 +283,18 @@ Com o LCP mobile e os números públicos de uso de 3 serviços (Meu INSS, Valore
 
 Para conferir os números principais sem rodar a análise inteira: `python analysis/check_results.py` (só numpy e pandas).
 
+## Dashboard (entrega final)
+
+Um único arquivo HTML estático, sem servidor e sem internet: abra [`dashboard/index.html`](dashboard/index.html) no navegador. Ele traz o resumo, os serviços e os critérios, o método, as RQ1 a RQ3 com gráficos, o impacto (com controle da parcela de acessos mobile), as ameaças à validade e as conclusões. O botão "Modo apresentação" aumenta os textos e os gráficos.
+
+Os números vêm dos CSVs de `analysis/output/todas/` e de `data/`, e os textos vêm dos documentos de `docs/`. Para regerar a página depois de mudar qualquer um deles:
+
+```bash
+python dashboard/build.py   # só pandas
+```
+
+`build.py` confere que a fórmula do controle de impacto reproduz `analysis/output/impact_sensitivity.csv` antes de gravar o `index.html`.
+
 ## Situação do piloto (17/11/2026)
 
 24 execuções em duas sessões (seeds 41872753 e 484856555), nenhum erro de script, menor intervalo

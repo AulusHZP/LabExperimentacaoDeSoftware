@@ -15,7 +15,7 @@ Varia muito. O Kruskal–Wallis dá p < 0,001 (Holm) nos 4 casos (performance sc
 | Performance score mobile (mediana) | Valores a Receber, 1; Meu INSS, 23,5; Meu SUS Digital, 25 |
 | LCP desktop | Meu SUS Digital, 8,0 s |
 
-O melhor LCP mobile é o da Receita Federal (6,2 s), e ele ainda é mais que o dobro do limite de 2,5 s considerado "bom" pela web.dev. Nenhum dos 10 serviços fica abaixo de 2,5 s no mobile.
+O melhor LCP mobile é o da Receita Federal (6,1 s), e ele ainda é mais que o dobro do limite de 2,5 s considerado "bom" pela web.dev. Nenhum dos 10 serviços fica abaixo de 2,5 s no mobile.
 
 **RQ2. Serviços com pior desempenho têm pior acessibilidade?**
 Inconclusivo. O ρ de Spearman entre as medianas é 0,41 (mobile) e 0,48 (desktop), no sentido esperado, mas com n = 10 o p (Holm) é 0,33 e o IC 95% por bootstrap vai de cerca de −0,3 a 0,9. Não dá para dizer que existe associação nem que não existe. O accessibility score é constante dentro de 18 dos 20 grupos, então ele separa serviços, mas pouco. O caso mais claro é o Meu SUS Digital, que tem o pior accessibility score (70 no mobile, 78 no desktop) e um dos piores desempenhos; a Receita Federal vai no sentido oposto (o melhor desempenho no desktop, 98, e accessibility 81).
