@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab05 · Medição de serviços digitais do gov.br</title>
+<style>
+:root{
+  --ink:#0f1115; --muted:#5b6270; --faint:#8b92a0; --line:#e6e8ec; --bg:#ffffff; --soft:#f6f7f9;
+  --accent:#3b4cca; --accent-soft:#e9ecfb; --warn:#9a5b00; --warn-soft:#fdf3e3;
+  --font:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"Cascadia Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--font);-webkit-font-smoothing:antialiased}
+body.pres{font-size:21px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+code{font-family:var(--mono);font-size:.88em;background:var(--soft);padding:.1em .35em;border-radius:4px}
+.ref{font-family:var(--mono);font-size:.88em;color:var(--muted)}
+nav{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .in{max-width:1080px;margin:0 auto;padding:10px 24px;display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+nav a{color:var(--muted);font-size:.88rem;padding:6px 10px;border-radius:8px}
+nav a:hover{background:var(--soft);color:var(--ink);text-decoration:none}
+nav .sp{flex:1}
+button{font:inherit;cursor:pointer}
+.btn{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px;border-radius:8px;font-size:.85rem}
+.btn:hover{background:var(--soft)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--bg);color:var(--muted);padding:6px 14px;font-size:.85rem}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+main{max-width:1080px;margin:0 auto;padding:0 24px 80px}
+header.hero{padding:64px 0 28px}
+.eyebrow{color:var(--accent);font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+h1{font-size:2.5rem;line-height:1.12;letter-spacing:-.02em;margin:.35em 0 .3em;font-weight:650}
+.lede{color:var(--muted);font-size:1.12rem;max-width:760px;margin:0}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.82rem;color:var(--muted)}
+section{padding:56px 0 8px;border-top:1px solid var(--line);margin-top:48px}
+section:first-of-type{border-top:0;margin-top:0}
+h2{font-size:1.65rem;letter-spacing:-.015em;margin:0 0 .4em;font-weight:650}
+h3{font-size:1.1rem;margin:1.6em 0 .4em;font-weight:650}
+h4,h5{font-size:1rem;margin:1.3em 0 .3em}
+p{margin:.6em 0}
+.sub{color:var(--muted);max-width:780px;margin:0 0 20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin:24px 0}
+.card{border:1px solid var(--line);border-radius:14px;padding:20px 22px;background:var(--bg)}
+.card .k{color:var(--muted);font-size:.82rem}
+.card .v{font-size:2.3rem;font-weight:650;letter-spacing:-.02em;line-height:1.15;margin:.2em 0}
+.card .n{color:var(--muted);font-size:.86rem}
+body.pres .card .v{font-size:3rem}
+.rq{display:grid;grid-template-columns:64px 1fr;gap:4px 16px;border-top:1px solid var(--line);padding:14px 0}
+.rq .t{font-weight:650;color:var(--accent)}
+.rq p{margin:0}
+.rq .tag{font-size:.78rem;padding:2px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap}
+.rq .tag.warn{background:var(--warn-soft);color:var(--warn)}
+.controls{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:8px 0 14px}
+.controls label{color:var(--muted);font-size:.85rem}
+.chart{border:1px solid var(--line);border-radius:14px;padding:12px 8px 4px;margin:8px 0}
+.chart svg{width:100%;height:auto;display:block}
+.read{color:var(--muted);font-size:.93rem;margin:10px 2px 6px}
+.stat{font-family:var(--mono);font-size:.84rem;color:var(--muted);margin:6px 2px}
+.note{background:var(--warn-soft);color:var(--warn);border-radius:12px;padding:12px 16px;font-size:.92rem;margin:14px 0}
+.tw{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.8rem;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.total td{font-weight:650;border-top:1px solid var(--ink)}
+details{border:1px solid var(--line);border-radius:12px;margin:12px 0;background:var(--bg)}
+details>summary{cursor:pointer;padding:12px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details>summary::after{content:"+";color:var(--faint)}
+details[open]>summary::after{content:"–"}
+details>.body{padding:0 18px 14px;border-top:1px solid var(--line)}
+details .body h3:first-child,details .body h4:first-child{margin-top:1em}
+.body ul,.body ol{padding-left:1.3em;margin:.5em 0}
+.body li{margin:.25em 0}
+pre{background:var(--soft);padding:12px 14px;border-radius:10px;overflow-x:auto;font-family:var(--mono);font-size:.84rem}
+.slider{display:flex;align-items:center;gap:12px}
+input[type=range]{accent-color:var(--accent);width:220px}
+select{font:inherit;font-size:.85rem;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.bar{height:8px;border-radius:99px;background:var(--accent-soft);overflow:hidden;min-width:80px}
+.bar i{display:block;height:100%;background:var(--accent)}
+footer{border-top:1px solid var(--line);margin-top:64px;padding:24px 0;color:var(--faint);font-size:.85rem}
+svg text{font-family:var(--font);fill:var(--muted);font-size:12.5px}
+svg .lbl{fill:var(--ink)}
+svg .axis{stroke:var(--line);stroke-width:1}
+svg .grid{stroke:#f0f1f4;stroke-width:1}
+@media print{nav,.controls{display:none}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav><div class="in">
+  <a href="#resumo">Resumo</a><a href="#servicos">Serviços</a><a href="#metodo">Método</a>
+  <a href="#rq1">RQ1</a><a href="#rq2">RQ2</a><a href="#rq3">RQ3</a>
+  <a href="#impacto">Impacto</a><a href="#validade">Validade</a><a href="#conclusoes">Conclusões</a>
+  <span class="sp"></span>
+  <button class="btn" id="presBtn" type="button">Modo apresentação</button>
+</div></nav>
+<main>
+<header class="hero">
+  <div class="eyebrow">Laboratório de Experimentação de Software · Lab05</div>
+  <h1>Quanto tempo o gov.br faz o usuário esperar?</h1>
+  <p class="lede">Medição externa, com o Lighthouse, da página de entrada de 10 serviços digitais do governo, como um visitante comum a carregaria. Sem teste de carga, sem login, sem dados pessoais.</p>
+  <div class="pills" id="pills"></div>
+</header>
+
+<section id="resumo">
+  <h2>Resumo</h2>
+  <div class="cards" id="cards"></div>
+  <div id="rqsum"></div>
+  <div class="note" id="floorNote"></div>
+</section>
+
+<section id="servicos">
+  <h2>Os serviços e por que contam</h2>
+  <p class="sub">Dez páginas públicas de entrada, escolhidas por conveniência. O critério "alto impacto" usa números publicados pelos órgãos, com fonte e data de acesso. Onde não há número verificável, a tabela diz <strong>NÃO ENCONTRADO</strong> e nada foi estimado.</p>
+  <div id="svcGrid" class="cards"></div>
+  <details open><summary>Critérios "real", "em operação" e "alto impacto"</summary><div class="body" id="d-criterios"></div></details>
+  <details><summary>Lista final de URLs e trocas</summary><div class="body" id="d-urls"></div></details>
+</section>
+
+<section id="metodo">
+  <h2>Pergunta e método</h2>
+  <p class="sub">Três perguntas, medidas com o mesmo instrumento, na mesma máquina, com ordem aleatória e pausa mínima de 10 s entre execuções. O <code>robots.txt</code> de cada página foi lido antes de medir.</p>
+  <div class="cards" id="methodCards"></div>
+  <details><summary>Perguntas, hipóteses, GQM e entidades</summary><div class="body" id="d-metodo"></div></details>
+  <details><summary>Plano de coleta, ética e ambiente</summary><div class="body" id="d-coleta"></div></details>
+  <details><summary>As 7 categorias da pesquisa</summary><div class="body" id="d-categorias"></div></details>
+</section>
+
+<section id="rq1">
+  <h2>RQ1 · O desempenho varia entre os serviços?</h2>
+  <p class="sub">Caixa: do 1º ao 3º quartil das 10 execuções. Linha fina: mínimo e máximo. Traço forte: mediana.</p>
+  <div class="controls">
+    <div class="seg" id="rq1ff"></div><div class="seg" id="rq1metric"></div>
+  </div>
+  <div class="chart" id="rq1chart"></div>
+  <div class="stat" id="rq1stat"></div>
+  <p class="read" id="rq1read"></p>
+  <div class="note">O elemento LCP do Portal gov.br (mobile e desktop) e do Valores a Receber (mobile) é o banner de cookies. O LCP desses serviços mede quando o aviso aparece, não o conteúdo.</div>
+</section>
+
+<section id="rq2">
+  <h2>RQ2 · Pior desempenho, pior acessibilidade?</h2>
+  <p class="sub">Cada ponto é um serviço (mediana das 10 execuções). O accessibility score cobre só verificações automáticas.</p>
+  <div class="controls"><div class="seg" id="rq2ff"></div></div>
+  <div class="chart" id="rq2chart"></div>
+  <div class="stat" id="rq2stat"></div>
+  <p class="read" id="rq2read"></p>
+</section>
+
+<section id="rq3">
+  <h2>RQ3 · Quanto o mobile é pior que o desktop?</h2>
+  <p class="sub">LCP mediano de cada serviço nos dois presets do Lighthouse. O mobile emula um Moto G Power com CPU 4× mais lenta e rede simulada, não um celular real.</p>
+  <div class="chart" id="rq3chart"></div>
+  <div class="stat" id="rq3stat"></div>
+  <p class="read" id="rq3read"></p>
+  <div class="tw" id="rq3table"></div>
+</section>
+
+<section id="impacto">
+  <h2>Impacto · horas de espera por mês</h2>
+  <p class="sub">Modelo: (LCP − referência) × acessos por mês. Cobre só os serviços com um número público de uso que conta carregamentos da página.</p>
+  <div class="note" id="impNote"></div>
+  <div class="controls">
+    <label>Referência
+      <select id="impRef"><option value="ref_a_desktop_median">LCP desktop do próprio serviço</option><option value="ref_b_2500ms">Limite "bom" de 2,5 s</option></select>
+    </label>
+    <div class="slider"><label for="impShare">Acessos em celular</label><input id="impShare" type="range" min="0" max="100" step="10" value="100"><strong id="impShareVal">100%</strong></div>
+  </div>
+  <div class="tw" id="impTable"></div>
+  <p class="read" id="impRead"></p>
+  <details><summary>Premissas, fontes e o que não dá para afirmar</summary><div class="body" id="d-impacto"></div></details>
+</section>
+
+<section id="validade">
+  <h2>Ameaças à validade</h2>
+  <p class="sub">Os quatro tipos de Wohlin et al., cada um com o que foi feito e o que fica como limitação. A pseudo-replicação merece destaque: o ε² alto da RQ1 mostra que <em>estas páginas</em> diferem entre si, e não que serviços do governo em geral diferem.</p>
+  <details><summary>Conclusão, interna, construto e externa</summary><div class="body" id="d-ameacas"></div></details>
+</section>
+
+<section id="conclusoes">
+  <h2>Conclusões</h2>
+  <div class="body" id="d-conclusoes"></div>
+</section>
+
+<footer id="foot"></footer>
+</main>
+
+<script>
+const D = /*__DATA__*/null;
+const $ = (s, r = document) => r.querySelector(s);
+const nf = (x, d = 1) => Number(x).toLocaleString('pt-BR', {minimumFractionDigits: d, maximumFractionDigits: d});
+const pf = p => p < 0.001 ? '< 0,001' : nf(p, 3);
+const SHORT = {govbr:'Portal gov.br', meuinss:'Meu INSS', 'receita-ecac':'Receita Federal', 'ctps-digital':'Carteira de Trabalho Digital',
+  'svr-bcb':'Valores a Receber', meususdigital:'Meu SUS Digital', 'portal-mg':'Portal MG', 'portal-servidor':'Portal do Servidor',
+  consumidor:'Consumidor.gov.br', 'enem-inep':'ENEM'};
+const FFN = {mobile:'Mobile', desktop:'Desktop'};
+const NS = 'http://www.w3.org/2000/svg';
+
+// ---------- helpers
+const row = (arr, f) => arr.find(f);
+const desc = (svc, ff, metric) => row(D.desc, r => r.service === svc && r.formFactor === ff && r.metric === metric);
+const med = (svc, ff) => row(D.medians, r => r.service === svc && r.formFactor === ff);
+const svcIds = D.services.map(s => s.id);
+function ticks(max) {
+  const steps = [1, 2, 5, 10, 20, 25, 50, 100]; const s = steps.find(x => max / x <= 7) || 100; const t = [];
+  for (let v = 0; v <= max + 1e-9; v += s) t.push(v); return t;
+}
+function seg(el, options, initial, cb) {
+  const box = typeof el === 'string' ? $(el) : el; box.innerHTML = '';
+  options.forEach(([val, label]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = label;
+    if (val === initial) b.classList.add('on');
+    b.onclick = () => { [...box.children].forEach(c => c.classList.remove('on')); b.classList.add('on'); cb(val); };
+    box.appendChild(b);
+  });
+}
+const svgOpen = (w, h) => `<svg viewBox="0 0 ${w} ${h}" role="img" xmlns="${NS}">`;
+const nfa = x => Number.isInteger(x) ? nf(x, 0) : nf(x, 1);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+// ---------- header, cards, summary
+function renderTop() {
+  const m = D.meta;
+  $('#pills').innerHTML = [`${D.services.length} serviços`, `${m.validRuns} execuções válidas de ${m.attempts} tentativas`,
+    `Lighthouse ${m.lighthouse}`, `Chrome ${m.chrome}`, 'coleta em 25/11/2026'].map(t => `<span class="pill">${t}</span>`).join('');
+  const lcpM = D.services.map(s => ({id: s.id, v: desc(s.id, 'mobile', 'LCP').median / 1000})).sort((a, b) => b.v - a.v);
+  const r3 = row(D.rq3, r => r.metric === 'LCP');
+  const tot = impactTotals('ref_a_desktop_median', 1);
+  $('#cards').innerHTML = `
+    <div class="card"><div class="k">Pior LCP no mobile</div><div class="v">${nf(lcpM[0].v)} s</div><div class="n">${SHORT[lcpM[0].id]} (mediana de 10 execuções)</div></div>
+    <div class="card"><div class="k">LCP mobile contra desktop</div><div class="v">${nf(r3.median_mobile / 1000)} s · ${nf(r3.median_desktop / 1000)} s</div><div class="n">mediana dos 10 serviços; diferença mediana de ${nf(r3.median_difference / 1000)} s</div></div>
+    <div class="card"><div class="k">Espera somada por mês (piso)</div><div class="v">${nf(tot.central, 0)} h</div><div class="n">3 de 10 serviços, se todo acesso for mobile (teto do modelo)</div></div>`;
+  const kwL = D.kw.filter(r => r.metric === 'LCP'), kwP = D.kw.filter(r => r.metric === 'performanceScore');
+  const e2 = D.kw.map(r => r.epsilon2);
+  const r2 = D.rq2.filter(r => r.unit === 'service-median');
+  const rhoM = r2.find(r => r.formFactor === 'mobile'), rhoD = r2.find(r => r.formFactor === 'desktop');
+  const worstScore = D.services.map(s => ({id: s.id, v: desc(s.id, 'mobile', 'performanceScore').median})).sort((a, b) => a.v - b.v)[0];
+  const faster = D.rq3svc.filter(r => r.metric === 'LCP' && r.median_difference > 0).length;
+  $('#rqsum').innerHTML = `
+    <div class="rq"><div class="t">RQ1</div><div><p><span class="tag">Varia muito</span> Entre os serviços, o desempenho difere nos 4 casos (Kruskal–Wallis, p ${esc(pf(Math.max(...D.kw.map(r => r.p_holm))))} com Holm; ε² de ${nf(Math.min(...e2), 2)} a ${nf(Math.max(...e2), 2)}). Pior LCP mobile: ${SHORT[lcpM[0].id]}, ${nf(lcpM[0].v)} s. Pior score mobile: ${SHORT[worstScore.id]}, ${nf(worstScore.v, 0)}.</p></div></div>
+    <div class="rq"><div class="t">RQ2</div><div><p><span class="tag warn">Inconclusivo</span> ρ de Spearman de ${nf(rhoM.spearman_rho, 2)} (mobile) e ${nf(rhoD.spearman_rho, 2)} (desktop) entre as medianas, mas com 10 serviços o p (Holm) é ${nf(rhoM.spearman_p_holm, 2)} e o IC 95% inclui o zero.</p></div></div>
+    <div class="rq"><div class="t">RQ3</div><div><p><span class="tag">Mobile é pior</span> O LCP mobile é maior em ${faster} dos 10 serviços: ${nf(r3.median_mobile / 1000)} s contra ${nf(r3.median_desktop / 1000)} s (Wilcoxon pareado, p Holm = ${nf(r3.wilcoxon_p_holm, 3)}; rank-biserial ${nf(r3.paired_rank_biserial, 2)}). A mediana das razões por serviço é ${nf(r3.median_ratio, 1)}×; a razão entre as duas medianas é ${nf(r3.median_mobile / r3.median_desktop, 1)}×.</p></div></div>`;
+  $('#floorNote').innerHTML = '<strong>Leia o impacto como piso.</strong> Os números de espera cobrem 3 serviços de 10 e não são o tempo de espera do gov.br. Os três serviços com pior LCP mobile não têm número de uso utilizável e ficaram de fora da soma.';
+}
+
+// ---------- service grid + method cards
+function renderServices() {
+  $('#svcGrid').innerHTML = D.services.map(s => {
+    const u = D.usage.find(x => x.service === s.id);
+    const has = u && u.useInConversion;
+    return `<div class="card"><div class="k">${esc(s.url.replace(/^https?:\/\//, '').slice(0, 38))}</div><div style="font-weight:650;margin:.2em 0">${esc(SHORT[s.id])}</div>
+      <div class="n">${has ? 'Número de uso na conta de impacto: ' + nf(u.value / 1e6, 1) + ' mi ' + esc(u.unit) + ' (' + u.period + ')' : 'Sem número de uso utilizável para a página medida'}</div></div>`;
+  }).join('');
+  const m = D.meta;
+  $('#methodCards').innerHTML = `
+    <div class="card"><div class="k">Execuções</div><div class="v">${m.validRuns}</div><div class="n">10 serviços × 2 form factors × 10 réplicas; ${m.failedAttempts} tentativas inválidas, todas refeitas</div></div>
+    <div class="card"><div class="k">Sessões</div><div class="v">${m.sessions.length}</div><div class="n">manhã e tarde de 25/11/2026; sem bloco à noite; seed ${m.seed}</div></div>
+    <div class="card"><div class="k">Máquina</div><div class="v" style="font-size:1.1rem;line-height:1.4">${esc(m.machine)}</div><div class="n">Lighthouse ${m.lighthouse}, Chrome ${m.chrome}</div></div>`;
+}
+
+// ---------- RQ1 boxplot
+const st1 = {ff: 'mobile', metric: 'LCP'};
+function boxplot(el, items, o) {
+  const W = 860, rowH = 38, L = 190, R = 100, T = 14, B = 38, H = T + items.length * rowH + B;
+  const X = v => L + (v / o.max) * (W - L - R);
+  let s = svgOpen(W, H);
+  ticks(o.max).forEach(t => { s += `<line class="grid" x1="${X(t)}" x2="${X(t)}" y1="${T}" y2="${H - B}"/><text x="${X(t)}" y="${H - B + 18}" text-anchor="middle">${nf(t, 0)}${o.unit}</text>`; });
+  items.forEach((it, i) => {
+    const y = T + i * rowH + rowH / 2, bw = Math.max(X(it.q3) - X(it.q1), 2.5);
+    s += `<text class="lbl" x="${L - 12}" y="${y + 4}" text-anchor="end">${esc(it.label)}</text>
+      <line x1="${X(it.min)}" x2="${X(it.max)}" y1="${y}" y2="${y}" stroke="#a9b0bd" stroke-width="1.4"/>
+      <rect x="${X(it.q1)}" y="${y - 10}" width="${bw}" height="20" rx="3" fill="var(--accent-soft)" stroke="var(--accent)"/>
+      <line x1="${X(it.med)}" x2="${X(it.med)}" y1="${y - 10}" y2="${y + 10}" stroke="var(--accent)" stroke-width="3"/>
+      <text x="${X(it.max) + 8}" y="${y + 4}">${o.dec ? nf(it.med, o.dec) : nfa(it.med)}${o.unit}</text>`;
+  });
+  el.innerHTML = s + '</svg>';
+}
+function renderRQ1() {
+  const {ff, metric} = st1, lcp = metric === 'LCP', k = lcp ? 1000 : 1;
+  const items = svcIds.map(id => {
+    const r = desc(id, ff, metric);
+    return {id, label: SHORT[id], min: r.min / k, q1: r.q1 / k, med: r.median / k, q3: r.q3 / k, max: r.max / k, iqr: r.iqr / k};
+  }).sort((a, b) => lcp ? b.med - a.med : a.med - b.med);
+  const max = lcp ? Math.ceil(Math.max(...items.map(i => i.max)) / 5) * 5 : 100;
+  boxplot($('#rq1chart'), items, {max, unit: lcp ? ' s' : '', dec: lcp ? 1 : 0});
+  const kw = row(D.kw, r => r.formFactor === ff && r.metric === metric);
+  $('#rq1stat').textContent = `Kruskal–Wallis: H = ${nf(kw.H, 1)}, gl = ${kw.df}, p (Holm) ${pf(kw.p_holm)}, ε² = ${nf(kw.epsilon2, 2)}  ·  n = ${kw.n} (10 serviços × 10 execuções)`;
+  const w = items[0], b = items[items.length - 1];
+  $('#rq1read').textContent = `Pior: ${w.label} (${lcp ? nf(w.med, 1) + ' s' : nfa(w.med)}). Melhor: ${b.label} (${lcp ? nf(b.med, 1) + ' s' : nfa(b.med)}). O teste indica que as 10 páginas não vêm da mesma distribuição. As repetições da mesma página variam pouco, então o ε² é alto; isso vale para estas páginas, não para o gov.br em geral.`;
+}
+
+// ---------- RQ2 scatter
+const st2 = {ff: 'mobile'};
+function renderRQ2() {
+  const ff = st2.ff, W = 860, H = 440, L = 64, R = 40, T = 18, B = 54;
+  const pts = svcIds.map(id => ({id, x: med(id, ff).performanceScore, y: med(id, ff).accessibilityScore}));
+  const ymin = Math.floor((Math.min(...pts.map(p => p.y)) - 4) / 5) * 5, ymax = 100;
+  const X = v => L + (v / 100) * (W - L - R), Y = v => T + (1 - (v - ymin) / (ymax - ymin)) * (H - T - B);
+  let s = svgOpen(W, H);
+  for (let v = 0; v <= 100; v += 20) s += `<line class="grid" x1="${X(v)}" x2="${X(v)}" y1="${T}" y2="${H - B}"/><text x="${X(v)}" y="${H - B + 18}" text-anchor="middle">${v}</text>`;
+  for (let v = ymin; v <= ymax; v += 5) s += `<line class="grid" x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${L - 10}" y="${Y(v) + 4}" text-anchor="end">${v}</text>`;
+  s += `<text x="${(L + W - R) / 2}" y="${H - 10}" text-anchor="middle">Performance score (mediana)</text><text transform="translate(16 ${(T + H - B) / 2}) rotate(-90)" text-anchor="middle">Accessibility score (mediana)</text>`;
+  pts.forEach(p => { const left = X(p.x) > W - 210; s += `<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="6" fill="var(--accent)" fill-opacity=".85"/><text class="lbl" x="${X(p.x) + (left ? -10 : 10)}" y="${Y(p.y) + 4}" text-anchor="${left ? 'end' : 'start'}">${esc(SHORT[p.id])}</text>`; });
+  $('#rq2chart').innerHTML = s + '</svg>';
+  const c = row(D.rq2, r => r.formFactor === ff && r.unit === 'service-median');
+  $('#rq2stat').textContent = `Spearman (medianas por serviço, n = ${c.n}): ρ = ${nf(c.spearman_rho, 2)}, IC 95% [${nf(c.ci_low, 2)}; ${nf(c.ci_high, 2)}], p (Holm) = ${nf(c.spearman_p_holm, 2)}  ·  τ-b de Kendall = ${nf(c.kendall_tau_b, 2)}`;
+  $('#rq2read').textContent = 'A correlação é positiva, no sentido esperado, mas não é significativa com 10 serviços e o intervalo vai de uma correlação negativa fraca a uma positiva forte. O resultado é inconclusivo: não dá para dizer que existe nem que não existe associação. Mesmo que existisse, não mostraria que um problema causa o outro. O accessibility score é constante dentro de quase todos os grupos, o que limita o teste.';
+}
+
+// ---------- RQ3 dumbbell
+function renderRQ3() {
+  const items = svcIds.map(id => ({id, d: med(id, 'desktop').LCP / 1000, m: med(id, 'mobile').LCP / 1000})).sort((a, b) => b.m - a.m);
+  const W = 860, rowH = 38, L = 190, R = 70, T = 30, B = 38, H = T + items.length * rowH + B, max = Math.ceil(Math.max(...items.map(i => i.m)) / 5) * 5;
+  const X = v => L + (v / max) * (W - L - R);
+  let s = svgOpen(W, H);
+  ticks(max).forEach(t => { s += `<line class="grid" x1="${X(t)}" x2="${X(t)}" y1="${T}" y2="${H - B}"/><text x="${X(t)}" y="${H - B + 18}" text-anchor="middle">${t} s</text>`; });
+  s += `<circle cx="${L}" cy="12" r="5" fill="#9aa2b1"/><text x="${L + 12}" y="16">Desktop</text><circle cx="${L + 100}" cy="12" r="5" fill="var(--accent)"/><text x="${L + 112}" y="16">Mobile</text>`;
+  items.forEach((it, i) => {
+    const y = T + i * rowH + rowH / 2;
+    s += `<text class="lbl" x="${L - 12}" y="${y + 4}" text-anchor="end">${esc(SHORT[it.id])}</text>
+      <line x1="${X(it.d)}" x2="${X(it.m)}" y1="${y}" y2="${y}" stroke="#c9cfda" stroke-width="3"/>
+      <circle cx="${X(it.d)}" cy="${y}" r="6" fill="#9aa2b1"/><circle cx="${X(it.m)}" cy="${y}" r="6" fill="var(--accent)"/>
+      <text x="${X(it.m) + 12}" y="${y + 4}">${nf(it.m)} s</text>`;
+  });
+  $('#rq3chart').innerHTML = s + '</svg>';
+  const r = row(D.rq3, x => x.metric === 'LCP'), p = row(D.rq3, x => x.metric === 'performanceScore');
+  $('#rq3stat').textContent = `LCP: W = ${r.wilcoxon_W}, p (Holm) = ${nf(r.wilcoxon_p_holm, 3)}, rank-biserial = ${nf(r.paired_rank_biserial, 2)}, δ de Cliff = ${nf(r.cliffs_delta, 2)}  ·  Score: W = ${p.wilcoxon_W}, p (Holm) = ${nf(p.wilcoxon_p_holm, 3)}, mediana das diferenças = ${nf(p.median_difference, 2)} pontos`;
+  const faster = items.filter(i => i.m > i.d).length;
+  $('#rq3read').textContent = `O mobile é mais lento em ${faster} dos ${items.length} serviços. Mediana: ${nf(r.median_mobile / 1000)} s no mobile contra ${nf(r.median_desktop / 1000)} s no desktop, diferença de ${nf(r.median_difference / 1000)} s. Com 10 pares, o menor p possível do Wilcoxon exato é 0,002 (0,004 com Holm): o resultado chegou a esse mínimo. O estudo compara dois presets do Lighthouse, e não celulares reais.`;
+  const rows = D.rq3svc.filter(x => x.metric === 'LCP').sort((a, b) => b.median_difference - a.median_difference);
+  $('#rq3table').innerHTML = '<table><thead><tr><th>Serviço</th><th class="num">LCP desktop (s)</th><th class="num">LCP mobile (s)</th><th class="num">Diferença (s)</th><th class="num">p (Holm)</th><th class="num">δ de Cliff</th></tr></thead><tbody>' +
+    rows.map(x => `<tr><td>${esc(SHORT[x.service])}</td><td class="num">${nf(x.median_desktop / 1000)}</td><td class="num">${nf(x.median_mobile / 1000)}</td><td class="num">${nf(x.median_difference / 1000)}</td><td class="num">${nf(x.wilcoxon_p_holm, 3)}</td><td class="num">${nf(x.cliffs_delta, 2)}</td></tr>`).join('') + '</tbody></table>';
+}
+
+// ---------- impact
+const conv = () => D.usage.filter(u => u.useInConversion);
+function hours(svc, ref, share) {
+  const m = D.impact.find(r => r.service === svc && r.reference === ref && r.formFactor === 'mobile');
+  const d = D.impact.find(r => r.service === svc && r.reference === ref && r.formFactor === 'desktop');
+  const f = k => share * m[k] + (1 - share) * (d ? d[k] : 0);
+  return {low: f('hours_low'), central: f('hours_median'), high: f('hours_high'), events: m.monthly_events};
+}
+function impactTotals(ref, share) {
+  return conv().reduce((a, u) => { const h = hours(u.service, ref, share); return {low: a.low + h.low, central: a.central + h.central, high: a.high + h.high}; }, {low: 0, central: 0, high: 0});
+}
+function renderImpact() {
+  const ref = $('#impRef').value, share = $('#impShare').value / 100;
+  $('#impShareVal').textContent = Math.round(share * 100) + '%';
+  const tot = impactTotals(ref, share);
+  const body = conv().map(u => {
+    const h = hours(u.service, ref, share);
+    return `<tr><td>${esc(SHORT[u.service])}</td><td>${nf(u.value / 1e6, 1)} mi ${esc(u.unit)} (${u.period})</td><td class="num">${nf(h.events / 1e6, 1)} mi</td>
+      <td class="num">${nf(h.low, 0)}</td><td class="num"><strong>${nf(h.central, 0)}</strong></td><td class="num">${nf(h.high, 0)}</td>
+      <td><div class="bar"><i style="width:${tot.central ? (100 * h.central / tot.central).toFixed(0) : 0}%"></i></div></td></tr>`;
+  }).join('');
+  $('#impTable').innerHTML = `<table><thead><tr><th>Serviço</th><th>Número de uso</th><th class="num">Eventos por mês</th><th class="num">Horas/mês baixo</th><th class="num">central</th><th class="num">alto</th><th>Parte do total</th></tr></thead><tbody>${body}
+    <tr class="total"><td>Total (3 de 10 serviços)</td><td></td><td></td><td class="num">${nf(tot.low, 0)}</td><td class="num">${nf(tot.central, 0)}</td><td class="num">${nf(tot.high, 0)}</td><td></td></tr></tbody></table>`;
+  $('#impRead').textContent = share === 1
+    ? 'Com 100% dos acessos em celular, o resultado é o teto do modelo. Os números públicos de uso não separam o dispositivo; mova o controle para ver a faixa. Baixo e alto vêm só da variação entre as execuções, e não da incerteza do impacto.'
+    : `Com ${Math.round(share * 100)}% dos acessos em celular, o total central é ${nf(tot.central, 0)} horas por mês. A referência escolhida muda o que conta como espera "extra".`;
+}
+
+// ---------- boot
+function boot() {
+  renderTop(); renderServices();
+  const d = D.docs;
+  $('#d-criterios').innerHTML = d.criterios; $('#d-urls').innerHTML = d.urls; $('#d-metodo').innerHTML = d.metodo;
+  $('#d-coleta').innerHTML = d.coleta; $('#d-categorias').innerHTML = d.categorias; $('#d-impacto').innerHTML = d.impacto;
+  $('#d-ameacas').innerHTML = d.ameacas; $('#d-conclusoes').innerHTML = d.conclusoes;
+  $('#impNote').innerHTML = '<strong>Piso, não o tempo de espera do gov.br.</strong> A conta cobre Meu INSS, Valores a Receber e Portal MG (este com dado de 2021). Os outros 7 serviços não têm número de uso utilizável e ficaram de fora; nada foi estimado para eles.';
+  const ffOpts = [['mobile', 'Mobile'], ['desktop', 'Desktop']];
+  seg('#rq1ff', ffOpts, st1.ff, v => { st1.ff = v; renderRQ1(); });
+  seg('#rq1metric', [['LCP', 'LCP (s)'], ['performanceScore', 'Performance score']], st1.metric, v => { st1.metric = v; renderRQ1(); });
+  seg('#rq2ff', ffOpts, st2.ff, v => { st2.ff = v; renderRQ2(); });
+  renderRQ1(); renderRQ2(); renderRQ3(); renderImpact();
+  $('#impRef').onchange = renderImpact; $('#impShare').oninput = renderImpact;
+  $('#presBtn').onclick = () => { const on = document.body.classList.toggle('pres'); $('#presBtn').textContent = on ? 'Sair do modo apresentação' : 'Modo apresentação'; };
+  $('#foot').textContent = `Gerado em ${D.builtAt} por dashboard/build.py a partir dos CSVs e dos documentos da pasta Laboratorio05_MedicaoGovBr. Números de impacto: premissas e fontes em "Premissas, fontes e o que não dá para afirmar".`;
+}
+boot();
+</script>
+</body>
+</html>
